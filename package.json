@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --test tests/audiocut.test.js",
     "check": "node scripts/check-manifest.js",
-    "icons": "node scripts/build-icons.js"
+    "icons": "node scripts/build-icons.js",
+    "build:firefox": "node scripts/build-firefox.js"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2"

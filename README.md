@@ -37,6 +37,26 @@ fonctionner (non testé).
 **Mise à jour** : télécharge le nouveau zip, remplace le contenu du dossier, puis clique sur ⟳ sur la carte de
 l'extension dans `chrome://extensions`.
 
+## Firefox
+
+Une version Firefox (**Firefox 142 ou plus**) est publiée avec chaque release : `rf-sampler-firefox-vX.Y.Z.zip`.
+Firefox n'installe **durablement** que des extensions **signées par Mozilla** ; selon ton besoin :
+
+- **Essai temporaire** (rien à signer, disparaît au redémarrage de Firefox) : ouvre `about:debugging#/runtime/this-firefox`,
+  *Charger un module complémentaire temporaire…*, puis choisis le fichier `manifest.json` du zip dézippé.
+- **Installation durable** : la signature « auto-distribution » est gratuite. Crée un compte sur
+  [addons.mozilla.org](https://addons.mozilla.org), va dans le *Developer Hub* ▸ *Submit a New Add-on* ▸ **On your own**
+  (auto-distribution), envoie le zip Firefox, puis installe le fichier `.xpi` signé qui t'est rendu. Ta soumission reste
+  soumise aux règles de Mozilla pour les modules.
+- Firefox Developer Edition, Nightly ou ESR permettent aussi d'installer un module non signé
+  (préférence `xpinstall.signatures.required` à `false` dans `about:config`).
+
+Si l'éditeur n'arrive pas à télécharger l'épisode, vérifie dans `about:addons` ▸ RF Sampler ▸ *Autorisations* que l'accès
+aux sites `radiofrance.fr` et `radiofrance-podcast.net` est accordé (Firefox peut demander cette autorisation à part).
+
+> La version Firefox est vérifiée avec `web-ext lint` (0 erreur) et par des tests automatiques, mais elle n'a pas encore été
+> essayée dans un Firefox réel : signale tout problème dans les *issues*.
+
 ## Utilisation
 
 ### Télécharger
@@ -86,9 +106,10 @@ extension/        code de l'extension (c'est ce dossier qui est zippé pour les 
   popup.*         popup de téléchargement
   background.js   détection des requêtes audio
 docs/             captures d'écran du README
+dist/             (généré) versions prêtes à zipper — `npm run build:firefox` produit dist/firefox
 assets/           sources des icônes (SVG) — `icon.svg` (détaillée), `icon-small.svg` (16/32 px)
 tests/            tests Node (node:test) — nécessitent ffmpeg
-scripts/          vérifications (manifest) et génération des icônes
+scripts/          vérifications (manifest), génération des icônes, build Firefox
 ```
 
 ```bash
@@ -100,7 +121,8 @@ npm install && npm run icons   # régénère les PNG depuis assets/*.svg
 ### Publier une version
 1. Mets à jour `version` dans `extension/manifest.json` et ajoute une entrée dans `CHANGELOG.md`.
 2. `git commit`, puis `git tag vX.Y.Z && git push --tags`.
-3. Le workflow *Release* vérifie que le tag correspond à la version du manifest, lance les tests et publie le zip.
+3. Le workflow *Release* vérifie que le tag correspond à la version du manifest, lance les tests et publie les zips
+   Chrome et Firefox.
 
 ## Licence et crédits
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+- **Version Firefox** (Firefox 142 ou plus) : `rf-sampler-firefox-vX.Y.Z.zip`, générée automatiquement à partir du même
+  code par `scripts/build-firefox.js` (seul le manifeste diffère). Voir la section « Firefox » du README.
+- Code : couche de compatibilité `browser` / `chrome` ; plus aucun `innerHTML` dans le popup.
+
 ## 1.3.3
 - **Icône redessinée** : silhouette de poste de radio portative originale (poignée de transport, antenne télescopique),
   autour de la forme d'onde et des guides. Les icônes sont couvertes par la GPL-3.0 comme le reste du dépôt.

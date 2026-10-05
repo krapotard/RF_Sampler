@@ -25,21 +25,24 @@ jobs:
         run: |
           node scripts/check-manifest.js
           node --test tests/audiocut.test.js
-      - name: Créer le zip (manifest.json à la racine, avec les textes de licence)
+      - name: Créer les zips Chrome et Firefox (manifest.json à la racine, avec les textes de licence)
         run: |
-          mkdir dist
-          cp -r extension/. dist/
-          cp LICENSE THIRD_PARTY_NOTICES.md dist/
-          cp -r third_party dist/third_party
-          cd dist
-          zip -r "../rf-sampler-$GITHUB_REF_NAME.zip" . -x ".DS_Store"
-      - name: Publier la release (ou ajouter le zip à la release déjà créée depuis le site)
+          node scripts/build-firefox.js
+          mkdir -p dist/chrome
+          cp -r extension/. dist/chrome/
+          for d in dist/chrome dist/firefox; do
+            cp LICENSE THIRD_PARTY_NOTICES.md "$d/"
+            cp -r third_party "$d/third_party"
+          done
+          (cd dist/chrome && zip -r "../../rf-sampler-$GITHUB_REF_NAME.zip" . -x ".DS_Store")
+          (cd dist/firefox && zip -r "../../rf-sampler-firefox-$GITHUB_REF_NAME.zip" . -x ".DS_Store")
+      - name: Publier la release (ou ajouter les zips à la release déjà créée depuis le site)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FILE="rf-sampler-$GITHUB_REF_NAME.zip"
+          FILES=("rf-sampler-$GITHUB_REF_NAME.zip" "rf-sampler-firefox-$GITHUB_REF_NAME.zip")
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$FILE" --clobber
+            gh release upload "$GITHUB_REF_NAME" "${FILES[@]}" --clobber
           else
-            gh release create "$GITHUB_REF_NAME" "$FILE" --title "$GITHUB_REF_NAME" --generate-notes
+            gh release create "$GITHUB_REF_NAME" "${FILES[@]}" --title "$GITHUB_REF_NAME" --generate-notes
           fi

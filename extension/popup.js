@@ -2,6 +2,9 @@
  * RF Sampler — Copyright (C) 2026 Thomas Garnier
  * Ce programme est un logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la
  * licence GNU GPL version 3 (voir le fichier LICENSE). Il est distribué SANS AUCUNE GARANTIE. */
+// Compatibilité Chrome / Firefox : Firefox expose `browser` (API à promesses), Chrome expose `chrome`.
+const api = globalThis.browser ?? globalThis.chrome;
+
 const $ = (id) => document.getElementById(id);
 
 // Exécutée DANS la page. Doit rester autonome (aucune référence à l'extérieur).
@@ -48,7 +51,7 @@ const sanitize = (s) =>
 const extOf = (url) => (url.split("?")[0].match(/\.(mp3|m4a|aac)$/i)?.[1] || "m4a").toLowerCase();
 
 function download(url, baseName) {
-  chrome.downloads.download({
+  api.downloads.download({
     url,
     filename: `${sanitize(baseName)}.${extOf(url)}`,
     conflictAction: "uniquify",
@@ -60,7 +63,10 @@ function item(url, baseName) {
   const li = document.createElement("li");
   const name = document.createElement("span");
   name.className = "name";
-  name.innerHTML = `<span class="ext">.${extOf(url)}</span> — `;
+  const extTag = document.createElement("span");
+  extTag.className = "ext";
+  extTag.textContent = "." + extOf(url);
+  name.append(extTag, " — ");
   name.append(document.createTextNode(baseName));
   const row = document.createElement("div");
   row.className = "row";
@@ -73,8 +79,8 @@ function item(url, baseName) {
   const ed = document.createElement("button");
   ed.className = "secondary";
   ed.textContent = "✂ Découper un extrait";
-  ed.onclick = () => chrome.tabs.create({
-    url: chrome.runtime.getURL("editor.html") + "?src=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(baseName),
+  ed.onclick = () => api.tabs.create({
+    url: api.runtime.getURL("editor.html") + "?src=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(baseName),
   });
   row.append(ed);
 
@@ -104,19 +110,19 @@ function group(title, urls, nameFor) {
 
 (async () => {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await api.tabs.query({ active: true, currentWindow: true });
     if (!tab?.url || !/^https:\/\/([^/]+\.)?radiofrance\.fr\//.test(tab.url)) {
       $("status").textContent = "Ouvre d'abord une page d'épisode sur radiofrance.fr.";
       return;
     }
 
-    const [{ result }] = await chrome.scripting.executeScript({
+    const [{ result }] = await api.scripting.executeScript({
       target: { tabId: tab.id },
       func: scanPage,
     });
 
     const key = `sniffed:${tab.id}`;
-    const sniffedAll = (await chrome.storage.session.get(key))[key] || [];
+    const sniffedAll = (await api.storage.session.get(key))[key] || [];
     const known = new Set([...result.main, ...result.others]);
     const sniffed = sniffedAll.filter((u) => !known.has(u));
 
@@ -137,7 +143,9 @@ function group(title, urls, nameFor) {
     group("Autres épisodes cités dans la page", result.others,
       (u) => decodeURIComponent(u.split("?")[0].split("/").pop()).replace(/\.\w+$/, ""));
   } catch (e) {
-    $("status").innerHTML = '<span class="error"></span>';
-    $("status").firstChild.textContent = "Erreur : " + (e && e.message ? e.message : String(e));
+    const err = document.createElement("span");
+    err.className = "error";
+    err.textContent = "Erreur : " + (e && e.message ? e.message : String(e));
+    $("status").replaceChildren(err);
   }
 })();
