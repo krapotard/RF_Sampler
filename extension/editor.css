@@ -1,0 +1,30 @@
+:root { color-scheme: dark; --bg:#0f1218; --panel:#171b24; --line:#262c3a; --txt:#e6e9f0; --mut:#8b93a7; --acc:#e2001a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--txt); font: 14px/1.45 system-ui, sans-serif; padding: 14px 18px 40px; }
+header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+h1 { font-size: 18px; margin: 0; }
+h2 { font-size: 14px; margin: 0 0 8px; }
+.muted { color: var(--mut); } .small { font-size: 12px; }
+#statusbar { margin: 10px 0; display: flex; align-items: center; gap: 12px; }
+#status { min-width: 260px; }
+#bar { flex: 1; max-width: 420px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+#barfill { height: 100%; width: 0; background: var(--acc); transition: width .15s; }
+#status.error { color: #ff7b7b; white-space: pre-wrap; }
+[hidden] { display: none !important; }
+#ov { display: block; width: 100%; background: #0b0d12; border: 1px solid var(--line); border-radius: 4px 4px 0 0; cursor: pointer; }
+#stage { position: relative; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 4px 4px; overflow: hidden; background: #0b0d12; }
+#stage canvas { position: absolute; left: 0; top: 0; display: block; }
+#base { position: relative !important; }
+.hint { color: var(--mut); font-size: 12px; margin: 8px 0 14px; }
+.hint .g { color: #35d07f; font-weight: 600; } .hint .r { color: #ff5c5c; font-weight: 600; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin: 10px 0; }
+.field { display: flex; align-items: center; gap: 8px; }
+.sep { width: 1px; height: 22px; background: var(--line); }
+input[type=text], input:not([type]) { background: var(--panel); border: 1px solid var(--line); border-radius: 5px; color: var(--txt); padding: 5px 8px; font: 13px ui-monospace, Menlo, Consolas, monospace; }
+input.bad { border-color: #ff5c5c; }
+select { background: var(--panel); color: var(--txt); border: 1px solid var(--line); border-radius: 5px; padding: 3px 6px; }
+button { background: var(--acc); color: #fff; border: 0; border-radius: 6px; padding: 7px 12px; cursor: pointer; font-size: 13px; }
+button:hover { filter: brightness(1.12); } button:disabled { opacity: .5; cursor: default; }
+button.sec { background: #2a3142; } button.sec:hover { background: #343c52; }
+.export { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-top: 16px; max-width: 760px; }
+.radio { display: block; margin: 6px 0; }

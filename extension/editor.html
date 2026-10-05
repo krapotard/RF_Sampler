@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>RF Sampler – Découper un extrait</title>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <header>
+    <h1>✂ RF Sampler · Découper un extrait</h1>
+    <div id="title" class="muted"></div>
+  </header>
+
+  <div id="statusbar">
+    <span id="status">Chargement…</span>
+    <div id="bar"><div id="barfill"></div></div>
+  </div>
+
+  <main id="ui" hidden>
+    <canvas id="ov" height="44" title="Vue d'ensemble : cliquer pour se déplacer"></canvas>
+    <div id="stage">
+      <canvas id="base"></canvas>
+      <canvas id="over"></canvas>
+    </div>
+    <p class="hint">
+      <b>Molette</b> : zoom · <b>glisser</b> : déplacer la vue · <b>clic</b> : placer le curseur ·
+      <b>glisser les guides</b> <span class="g">vert</span> / <span class="r">rouge</span> pour régler le début et la fin ·
+      <b>I</b> / <b>O</b> : début / fin au curseur · <b>Espace</b> : lecture / pause
+    </p>
+
+    <section class="controls">
+      <div class="field">
+        <label for="inStart">Début</label>
+        <input id="inStart" size="11" spellcheck="false">
+        <button id="setStart" class="sec" title="Début = position du curseur (I)">⟦ = curseur</button>
+      </div>
+      <div class="field">
+        <label for="inEnd">Fin</label>
+        <input id="inEnd" size="11" spellcheck="false">
+        <button id="setEnd" class="sec" title="Fin = position du curseur (O)">curseur = ⟧</button>
+      </div>
+      <div class="field"><span class="muted">Durée de l'extrait :</span> <b id="selDur">–</b></div>
+    </section>
+
+    <section class="controls">
+      <button id="playSel">▶ Écouter l'extrait</button>
+      <button id="playPause" class="sec">⏯ Lecture / pause</button>
+      <span class="sep"></span>
+      <button id="zoomOut" class="sec" title="Dézoomer">−</button>
+      <button id="zoomIn" class="sec" title="Zoomer">+</button>
+      <button id="zoomAll" class="sec">Tout voir</button>
+      <button id="zoomSel" class="sec">Zoom sur l'extrait</button>
+    </section>
+
+    <section class="export">
+      <h2>Exporter</h2>
+      <label class="radio"><input type="radio" name="mode" value="native" checked>
+        <span id="lblNative">Format d'origine — sans réencodage, instantané</span></label>
+      <label class="radio" id="rowMp3"><input type="radio" name="mode" value="mp3">
+        <span>MP3 — réencodé&nbsp;
+          <select id="kbps"><option value="96">96 kbit/s</option><option value="128" selected>128 kbit/s</option><option value="192">192 kbit/s</option><option value="256">256 kbit/s</option></select>
+        </span></label>
+      <div class="controls">
+        <button id="export">⬇ Exporter l'extrait</button>
+        <span id="exportStatus" class="muted"></span>
+      </div>
+      <p class="muted small">Précision de coupe : environ une trame audio (≈ 25 ms), plus le délai du décodeur — l'extrait démarre au plus tôt ~50 ms avant le repère, jamais après.</p>
+    </section>
+  </main>
+
+  <audio id="player" preload="auto"></audio>
+  <script src="lame.min.js"></script>
+  <script src="audiocut.js"></script>
+  <script src="dsp.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>

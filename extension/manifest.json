@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "RF Sampler (non officiel)",
+  "version": "1.3.3",
+  "description": "Télécharge et découpe les podcasts de radiofrance.fr : spectrogramme, guides début/fin, export sans perte ou MP3. Usage personnel. Non affilié à Radio France.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads",
+    "webRequest",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.radiofrance.fr/*",
+    "*://*.radiofrance-podcast.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "RF Sampler",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

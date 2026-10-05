@@ -1,0 +1,14 @@
+body { width: 380px; font: 14px/1.4 system-ui, sans-serif; margin: 0; padding: 12px; }
+h1 { font-size: 16px; margin: 0 0 8px; }
+h2 { font-size: 12px; text-transform: uppercase; color: #666; margin: 12px 0 4px; }
+ul { list-style: none; margin: 0; padding: 0; }
+li { padding: 6px 0; border-bottom: 1px solid #eee; }
+li .name { display: block; font-size: 12px; word-break: break-word; margin-bottom: 4px; }
+li .ext { font-weight: 600; color: #e2001a; }
+.row { display: flex; gap: 6px; }
+button { background: #e2001a; color: #fff; border: 0; border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 12px; }
+button:hover { background: #b80015; }
+button.secondary { background: #eee; color: #222; }
+button.secondary:hover { background: #ddd; }
+.error { color: #b80015; font-size: 12px; white-space: pre-wrap; }
+.note { color: #777; font-size: 11px; margin: 10px 0 0; }
